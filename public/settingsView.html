@@ -1,0 +1,18 @@
+<div ng-if="ctrl.visible() || ctrl.token">
+
+<div class="panel panel-default">
+    <div class="panel-heading">Zmiana hasła</div>
+    <div class="panel-body">
+        <form class="form" name="addForm" novalidate>
+            <div class="form-group">
+                <label for="firstName">Nowe hasło</label>
+                <input class="form-control" type="text" ng-model="ctrl.credential.password" id="password" name="password" required/>
+                <span style="color: red" ng-show="addForm.password.$dirty && addForm.password.$invalid">
+                    <span ng-show="addForm.password.$error.required">To pole jest wymagane.</span>
+                </span>
+            </div>
+            <button class="btn btn-primary"
+                ng-click="ctrl.changePassword()" ng-disabled="addForm.$invalid">Zmień</button>
+        </form>
+    </div>
+</div>

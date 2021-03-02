@@ -1,0 +1,105 @@
+<div ng-if="ctrl.visible()">
+
+<div class="row">
+    <div class="col col-sm-12">
+        <table class="table table-stripped table-hover">
+            <tr ng-click="ctrl.selected = -1">
+                <th>&nbsp;</th>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Rok</th>
+                <th>Kwota</th>
+                <th>Email</th>
+                <th>Rola</th>
+            </tr>
+            <tr ng-repeat="person in ctrl.persons" ng-click="ctrl.select($index)" ng-class="{ 'rowSelected': ctrl.selected == $index }">
+                <td ng-bind="$index == ctrl.selected ? '»' : ''"></td>
+                <td ng-bind="person.firstName"></td>
+                <td ng-bind="person.lastName"></td>
+                <td ng-bind="person.year"></td>
+                <td ng-bind="person.amount"></td>
+                <td ng-bind="person.email"></td>
+                <td ng-bind="person.role"></td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<br/><br/>
+
+<div class="panel panel-default">
+    <div class="panel-heading">{{ ctrl.selected < 0 ? 'Dodaj' : 'Zmień' }}</div>
+    <div class="panel-body">
+        <form class="form" name="addForm" novalidate>
+            <div class="form-group">
+                <label for="firstName">Imię</label>
+                <input class="form-control" type="text" ng-model="ctrl.person.firstName" id="firstName" name="firstName" required/>
+                <span style="color: red" ng-show="addForm.firstName.$dirty && addForm.firstName.$invalid">
+                    <span ng-show="addForm.firstName.$error.required">To pole jest wymagane.</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Nazwisko</label>
+                <input class="form-control" type="text" ng-model="ctrl.person.lastName" id="lastName" name="lastName" required/>
+                <span style="color: red" ng-show="addForm.lastName.$dirty && addForm.lastName.$invalid">
+                    <span ng-show="addForm.lastName.$error.required">To pole jest wymagane.</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input class="form-control" type="email" 
+                    ng-model="ctrl.person.email" ng-change="ctrl.onUserEmailChange(addForm)" id="email" name="email" required/>
+                <span style="color: red" ng-show="addForm.email.$dirty && addForm.email.$invalid">
+                    <span ng-show="addForm.email.$error.unique">Adres email jest już zajęty.</span>
+                    <span ng-show="addForm.email.$error.required">To pole jest wymagane.</span>
+                    <span ng-show="addForm.email.$error.email">Niepoprawny adres email.</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="year">Rok</label>
+                <input class="form-control" type="number" ng-model="ctrl.person.year" id="year" name="year" required/>
+                <span style="color: red" ng-show="addForm.year.$dirty && addForm.year.$invalid">
+                    <span ng-show="addForm.year.$error.required">To pole jest wymagane.</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label for="role">Rola</label>
+                <input class="form-control" type="number" 
+                    ng-model="ctrl.credential.role" ng-min="ctrl.roleMin" ng-max="ctrl.roleMax" id="role" name="role" required/>
+                <span style="color: red" ng-show="addForm.role.$dirty && addForm.role.$invalid">
+                    <span ng-if="!addForm.role.$valid">Dopuszczalny zakres to [{{ctrl.roleMin}}, {{ctrl.roleMax}}].</span>
+                    <span ng-show="addForm.role.$error.required">To pole jest wymagane.</span>
+                </span>
+            </div>
+            <div class="form-group" ng-if="ctrl.credential.generate || ctrl.selected < 0">
+                <div class="input-group">
+                    <label for="password">Hasło</label>
+                    <input class="form-control" type="text" 
+                        ng-model="ctrl.credential.password" ng-change="ctrl.onUserPasswordChange()" id="password" name="password" required/>
+                    <span class="input-group-btn" style="padding-top: 25px;">
+                        <button class="btn btn-success" type="button" ng-click="ctrl.passwordGenerate()">Generuj</button>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group" ng-if="!ctrl.credential.generate && ctrl.selected >= 0">
+                <div class="input-group">
+                    <label for="password">Token do zmiany hasła</label>
+                    <input class="form-control" type="text" ng-model="ctrl.tokenLink" disabled />
+                    <span class="input-group-btn" style="padding-top: 25px;">
+                        <button class="btn btn-success" type="button" ng-click="ctrl.tokenGenerate()">Generuj</button>
+                    </span>
+                </div>
+            </div>
+            <button class="btn btn-primary" ng-if="ctrl.selected < 0"
+                ng-click="ctrl.insertNewData(addForm)" ng-disabled="addForm.$invalid">Utwórz</button>
+            
+            <div ng-if="ctrl.selected >= 0">
+                <button class="btn btn-success" ng-click="ctrl.updateData(addForm)">Zmień</button>
+                <button class="btn btn-danger" ng-click="ctrl.deleteData()">Usuń</button>
+                <button class="btn btn-primary" ng-click="ctrl.cancelData()">Anuluj</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+</div>
