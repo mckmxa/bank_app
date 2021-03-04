@@ -43,9 +43,9 @@ module.exports = {
                             email: 1,
                             amount: 1,
                             year: 1,
-                            credential_id: '$personsWithCredentials._id',
+                            //credential_id: '$personsWithCredentials._id',
                             role: '$personsWithCredentials.role',
-                            password: '$personsWithCredentials.password',
+                            //password: '$personsWithCredentials.password',
                             generate: '$personsWithCredentials.generate'
                         }
                     }

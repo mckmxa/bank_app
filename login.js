@@ -20,7 +20,7 @@ module.exports = {
                 break
             case 'POST':
                 db.personCollection.findOne({ email: env.parsedPayload.login }, function (err, result1) {
-                    if(err || !result1) {
+                    if(err || !result1 || result1.active == false ) {
                         lib.serveError(env.res, 401, 'authorization failed')
                     } else {
                         db.credentialsCollection.findOne({ person_id: result1._id }, function (err, result2) {
